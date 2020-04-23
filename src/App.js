@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import './App.css';
 
 
@@ -7,7 +7,7 @@ import './App.css';
 // v1 STAR MATCH - Starting Template
 
 const StarMatch = () => {
-  const stars = utils.random(1,9);
+  const [stars,setStars] = useState(utils.random(1,9));
   return (
     <div className="game">
       <div className="help">
