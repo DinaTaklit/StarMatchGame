@@ -7,7 +7,7 @@ import './App.css';
 // v1 STAR MATCH - Starting Template
 
 const StarMatch = () => {
-  const stars = 8;
+  const stars = utils.random(1,9);
   return (
     <div className="game">
       <div className="help">
