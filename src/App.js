@@ -37,7 +37,7 @@ const PlayAgain = props => (
 
 // v1 STAR MATCH - Starting Template
 
-const StarMatch = () => {
+const Game = (porps) => {
   const [stars,setStars] = useState(utils.random(1,9));
   const [availableNums, setAvailableNums] = useState(utils.range(1,9));
   const [candidateNums, setCandidateNums] = useState([]);
@@ -66,12 +66,12 @@ const StarMatch = () => {
   });
  
 
-  // Reset the game one the game is done
-  const resetGame = () => {
-    setStars(utils.random(1,9));
-    setAvailableNums(utils.range(1,9));
-    setCandidateNums([]);
-  }
+  // Reset the game one the game is done => no need anymore after using the logic of key elemnt and unmounting see StartMatch component
+  // const resetGame = () => {
+  //   setStars(utils.random(1,9));
+  //   setAvailableNums(utils.range(1,9));
+  //   setCandidateNums([]);
+  // }
 
   const numberStatus = number => {
     if(!availableNums.includes(number)){
@@ -110,7 +110,7 @@ const StarMatch = () => {
         <div className="left">
           {
             gameStatus !== 'active' ? (
-              <PlayAgain onClick={resetGame} gameStatus={gameStatus} />
+              <PlayAgain onClick={props.startNewGame} gameStatus={gameStatus} />
             ) : (
               <StarsDisplay count={stars}></StarsDisplay>
             )
@@ -134,6 +134,13 @@ const StarMatch = () => {
     </div>
   );
 };
+
+// Create the StartMatch Game componenet which will hold the logic of the start game
+const StarMatch = () => {
+	const [gameId, setGameId] = useState(1);
+	return <Game key={gameId} startNewGame={() => setGameId(gameId + 1)}/>;
+}
+
 
 // Color Theme
 const colors = {
