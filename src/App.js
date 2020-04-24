@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import './App.css';
 
 // Extract stars as component and since a component should hold one sigle element and here we are using map we need to wrap it into a fragment
@@ -39,6 +39,20 @@ const StarMatch = () => {
   const candidatesAreWrong = utils.sum(candidateNums) > stars; // Cehcek if the candidates are wrong 
 
   const gameIsDone = availableNums.length === 0; // check if the game is done or not
+
+  const [secondsLeft, setSecondsLeft] = useState(10); // add seconds left state 
+
+  // Add secondsLeft side effect using setTimeout with useEffect method instead of setIntervale to learn more about react hooks 
+
+  useEffect(()=>{
+    // invoke the function if the secondsLeft > 0
+    if(secondsLeft > 0){
+      setTimeout(()=>{
+        setSecondsLeft(secondsLeft - 1);
+      }, 1000);
+    }
+  });
+
 
   // Reset the game one the game is done
   const resetGame = () => {
@@ -104,7 +118,7 @@ const StarMatch = () => {
           
         </div>
       </div>
-      <div className="timer">Time Remaining: 10</div>
+          <div className="timer">Time Remaining: {secondsLeft}</div>
     </div>
   );
 };
