@@ -37,7 +37,7 @@ const PlayAgain = props => (
 
 // v1 STAR MATCH - Starting Template
 
-const Game = (porps) => {
+const Game = (props) => {
   const [stars,setStars] = useState(utils.random(1,9));
   const [availableNums, setAvailableNums] = useState(utils.range(1,9));
   const [candidateNums, setCandidateNums] = useState([]);
