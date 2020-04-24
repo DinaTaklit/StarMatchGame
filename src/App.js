@@ -2,6 +2,12 @@ import React, { Component, useState } from 'react';
 import './App.css';
 
 
+const PlayNumber = props => (
+  <button
+    className="number"> {props.number}
+  </button>
+);
+
 
 
 // v1 STAR MATCH - Starting Template
@@ -22,10 +28,9 @@ const StarMatch = () => {
         </div>
         <div className="right">
           {utils.range(1,9).map(number=>
-            <button key={number} className="number">{number}</button>
+              <PlayNumber key={number} number={number}></PlayNumber>
           )}
           
-        
         </div>
       </div>
       <div className="timer">Time Remaining: 10</div>
