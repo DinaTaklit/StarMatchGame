@@ -21,6 +21,12 @@ const PlayNumber = props => (
   </button>
 );
 
+// Add playAgain component which will be shown after the game is done 
+const PlayAgain = props => (
+  <div className="game-done">
+    <button> Play Again</button>
+  </div>
+);
 
 
 // v1 STAR MATCH - Starting Template
@@ -31,6 +37,8 @@ const StarMatch = () => {
   const [candidateNums, setCandidateNums] = useState([]);
 
   const candidatesAreWrong = utils.sum(candidateNums) > stars; // Cehcek if the candidates are wrong 
+
+  const gameIsDone = availableNums.length === 0; // check if the game is done or not
 
   const numberStatus = number => {
     if(!availableNums.includes(number)){
@@ -67,7 +75,14 @@ const StarMatch = () => {
       </div>
       <div className="body">
         <div className="left">
+          {
+            gameIsDone ? (
+              <PlayAgain />
+            ) : (
             <StarsDisplay count={stars}></StarsDisplay>
+            )
+          }
+            
         </div>
         <div className="right">
           {utils.range(1,9).map(number=>
