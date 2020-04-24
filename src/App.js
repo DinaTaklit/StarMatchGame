@@ -34,22 +34,13 @@ const PlayAgain = props => (
   </div>
 );
 
-
-// v1 STAR MATCH - Starting Template
-
-const Game = (props) => {
+// Introduce a custom hook to hold that will manage the states of the game 
+const useGameState = () => {
   const [stars,setStars] = useState(utils.random(1,9));
   const [availableNums, setAvailableNums] = useState(utils.range(1,9));
   const [candidateNums, setCandidateNums] = useState([]);
   
   const [secondsLeft, setSecondsLeft] = useState(10); // add seconds left state 
-
-  const candidatesAreWrong = utils.sum(candidateNums) > stars; // Cehcek if the candidates are wrong 
-
-  // const gameIsDone = availableNums.length === 0; // check if the game is done or not => no more needed we can use gameStatus instead
-
-  // check the game status after seconds left is 0 
-  const gameStatus = availableNums.length === 0 ? 'won' : secondsLeft === 0 ? 'lost' : 'active'
 
   // Add secondsLeft side effect using setTimeout with useEffect method instead of setIntervale to learn more about react hooks 
 
@@ -64,7 +55,39 @@ const Game = (props) => {
       return () => clearTimeout(timerId);
     }
   });
- 
+
+  // hold the set states in same place too
+  const setGameState = (newCandidateNums) =>{if (utils.sum(newCandidateNums) !== stars) {
+    setCandidateNums(newCandidateNums);
+  } else {
+    const newAvailableNums = availableNums.filter(
+      n => !newCandidateNums.includes(n)
+    );
+    setStars(utils.randomSumIn(newAvailableNums,9));
+    setAvailableNums(newAvailableNums);
+    setCandidateNums([]);
+  }};
+  return {stars, availableNums, candidateNums, secondsLeft, setGameState} 
+};
+
+
+// v1 STAR MATCH - Starting Template
+
+const Game = (props) => {
+  const {
+    stars,
+    availableNums,
+    candidateNums,
+    secondsLeft,
+    setGameState,
+  } = useGameState();
+
+  const candidatesAreWrong = utils.sum(candidateNums) > stars; // Cehcek if the candidates are wrong 
+
+  // const gameIsDone = availableNums.length === 0; // check if the game is done or not => no more needed we can use gameStatus instead
+
+  // check the game status after seconds left is 0 
+  const gameStatus = availableNums.length === 0 ? 'won' : secondsLeft === 0 ? 'lost' : 'active'
 
   // Reset the game one the game is done => no need anymore after using the logic of key elemnt and unmounting see StartMatch component
   // const resetGame = () => {
@@ -89,16 +112,7 @@ const Game = (props) => {
     const newCandidateNums = 
       currentStatus === 'available' ? candidateNums.concat(number) : candidateNums.filter( cn => cn !== number);
 
-    if (utils.sum(newCandidateNums) !== stars) {
-      setCandidateNums(newCandidateNums);
-    } else {
-      const newAvailableNums = availableNums.filter(
-        n => !newCandidateNums.includes(n)
-      );
-      setStars(utils.randomSumIn(newAvailableNums,9));
-      setAvailableNums(newAvailableNums);
-      setCandidateNums([]);
-    }
+    setGameState(newCandidateNums);
   };
 
   return (
