@@ -45,11 +45,14 @@ const StarMatch = () => {
   // Add secondsLeft side effect using setTimeout with useEffect method instead of setIntervale to learn more about react hooks 
 
   useEffect(()=>{
+    // The effect itself run after the componenet got rendred
     // invoke the function if the secondsLeft > 0
     if(secondsLeft > 0){
-      setTimeout(()=>{
+      const timerId = setTimeout(()=>{
         setSecondsLeft(secondsLeft - 1);
       }, 1000);
+      // clear the Timout after each change (the component is about rerendring) on the component to avoid create the setTimout on every state change even once not needed this can be done using return statement which can invoke a function => it is a mecanism of use Effect hook 
+      return () => clearTimeout(timerId);
     }
   });
 
