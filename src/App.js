@@ -24,7 +24,7 @@ const PlayNumber = props => (
 // Add playAgain component which will be shown after the game is done 
 const PlayAgain = props => (
   <div className="game-done">
-    <button> Play Again</button>
+    <button onClick={props.onClick}> Play Again</button>
   </div>
 );
 
@@ -39,6 +39,13 @@ const StarMatch = () => {
   const candidatesAreWrong = utils.sum(candidateNums) > stars; // Cehcek if the candidates are wrong 
 
   const gameIsDone = availableNums.length === 0; // check if the game is done or not
+
+  // Reset the game one the game is done
+  const resetGame = () => {
+    setStars(utils.random(1,9));
+    setAvailableNums(utils.range(1,9));
+    setCandidateNums([]);
+  }
 
   const numberStatus = number => {
     if(!availableNums.includes(number)){
@@ -77,7 +84,7 @@ const StarMatch = () => {
         <div className="left">
           {
             gameIsDone ? (
-              <PlayAgain />
+              <PlayAgain onClick={resetGame}/>
             ) : (
             <StarsDisplay count={stars}></StarsDisplay>
             )
