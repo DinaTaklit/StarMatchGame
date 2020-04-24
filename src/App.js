@@ -24,6 +24,12 @@ const PlayNumber = props => (
 // Add playAgain component which will be shown after the game is done 
 const PlayAgain = props => (
   <div className="game-done">
+    <div
+      className = "message"
+      style = {{ color: props.gameStatus === 'lost' ? 'red' : 'green'}}
+    >
+      {props.gameStatus === 'lost'? 'Game Over' : 'You Won!'}
+    </div>
     <button onClick={props.onClick}> Play Again</button>
   </div>
 );
@@ -35,19 +41,22 @@ const StarMatch = () => {
   const [stars,setStars] = useState(utils.random(1,9));
   const [availableNums, setAvailableNums] = useState(utils.range(1,9));
   const [candidateNums, setCandidateNums] = useState([]);
+  
+  const [secondsLeft, setSecondsLeft] = useState(10); // add seconds left state 
 
   const candidatesAreWrong = utils.sum(candidateNums) > stars; // Cehcek if the candidates are wrong 
 
-  const gameIsDone = availableNums.length === 0; // check if the game is done or not
+  // const gameIsDone = availableNums.length === 0; // check if the game is done or not => no more needed we can use gameStatus instead
 
-  const [secondsLeft, setSecondsLeft] = useState(10); // add seconds left state 
+  // check the game status after seconds left is 0 
+  const gameStatus = availableNums.length === 0 ? 'won' : secondsLeft === 0 ? 'lost' : 'active'
 
   // Add secondsLeft side effect using setTimeout with useEffect method instead of setIntervale to learn more about react hooks 
 
   useEffect(()=>{
     // The effect itself run after the componenet got rendred
     // invoke the function if the secondsLeft > 0
-    if(secondsLeft > 0){
+    if(secondsLeft > 0 && availableNums.length > 0){
       const timerId = setTimeout(()=>{
         setSecondsLeft(secondsLeft - 1);
       }, 1000);
@@ -55,7 +64,7 @@ const StarMatch = () => {
       return () => clearTimeout(timerId);
     }
   });
-
+ 
 
   // Reset the game one the game is done
   const resetGame = () => {
@@ -74,7 +83,7 @@ const StarMatch = () => {
     return 'available'
   };
   const onNumberClick = (number, currentStatus) => {
-    if (currentStatus === 'used') {
+    if (gameStatus !== 'active' || currentStatus === 'used') {
       return;
     }
     const newCandidateNums = 
@@ -100,10 +109,10 @@ const StarMatch = () => {
       <div className="body">
         <div className="left">
           {
-            gameIsDone ? (
-              <PlayAgain onClick={resetGame}/>
+            gameStatus !== 'active' ? (
+              <PlayAgain onClick={resetGame} gameStatus={gameStatus} />
             ) : (
-            <StarsDisplay count={stars}></StarsDisplay>
+              <StarsDisplay count={stars}></StarsDisplay>
             )
           }
             
