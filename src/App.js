@@ -1,7 +1,16 @@
 import React, { Component, useState } from 'react';
 import './App.css';
 
+// Extract stars as component and since a component should hold one sigle element and here we are using map we need to wrap it into a fragment
+const StarsDisplay = props => (
+  <>
+    {utils.range(1,props.count).map(starId => 
+      <div key={starId} className="star" />
+    )}
+  </>
+);
 
+// Extract play button compoenent
 const PlayNumber = props => (
   <button
     className="number"> {props.number}
@@ -21,10 +30,7 @@ const StarMatch = () => {
       </div>
       <div className="body">
         <div className="left">
-          {utils.range(1,stars).map(starId => 
-              <div key={starId} className="star" />
-          )}
-        
+            <StarsDisplay count={stars}></StarsDisplay>
         </div>
         <div className="right">
           {utils.range(1,9).map(number=>
