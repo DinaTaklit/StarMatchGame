@@ -16,3 +16,7 @@ This a simple game where you can learn:
 - Using `Side Effects Hooks` by adding a timer to the game 👌
 - **Unmouting** and **Remounting** Components
 - Using **Custom Hooks** 😎.
+  
+## Credits 
+
+All credits go for the [React: Getting Started](https://app.pluralsight.com/library/courses/react-js-getting-started/table-of-contents) by it is instructor Samer Buna from react path in **Pluralsight*. 
